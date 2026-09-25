@@ -6,9 +6,31 @@ directory or one of its parents. The API key is read from `<work>/.apikey` and n
 """
 import json
 import os
+import ssl
 import sys
 import urllib.error
 import urllib.request
+
+
+def _ssl_context():
+    # Python from python.org (macOS) ships without root certificates until "Install Certificates.command" is
+    # run: HTTPS to the public API then fails with CERTIFICATE_VERIFY_FAILED. Fall back to certifi, then to
+    # the system bundle.
+    ctx = ssl.create_default_context()
+    if ctx.cert_store_stats().get("x509_ca", 0):
+        return ctx
+    try:
+        import certifi
+        return ssl.create_default_context(cafile=certifi.where())
+    except ImportError:
+        pass
+    for bundle in ("/etc/ssl/cert.pem", "/etc/ssl/certs/ca-certificates.crt"):
+        if os.path.exists(bundle):
+            return ssl.create_default_context(cafile=bundle)
+    return ctx
+
+
+_SSL = _ssl_context()
 
 
 def work_dir():
@@ -49,7 +71,7 @@ def call(cfg, method, path, body=None, auth=True):
     data = None if body is None else json.dumps(body).encode()
     req = urllib.request.Request(cfg["api"].rstrip("/") + path, data=data, method=method, headers=headers)
     try:
-        with urllib.request.urlopen(req, timeout=600) as r:
+        with urllib.request.urlopen(req, timeout=600, context=_SSL) as r:
             raw = r.read().decode()
             return r.status, (json.loads(raw) if raw else None)
     except urllib.error.HTTPError as e:
