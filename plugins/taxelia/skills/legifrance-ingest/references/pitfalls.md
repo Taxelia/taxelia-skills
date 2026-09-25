@@ -118,3 +118,37 @@ Chaque piège : ce qui s'est passé → quoi faire. Cite les numéros dans les c
   l'utilisateur (une évolution du moteur est hors du périmètre du skill).
 - **P42 — Sous-agents.** Lecture : en parallèle. Construction : **séquentielle** (API partagée). Donner
   à chacun les chemins de fichiers, pas le contenu ; exiger un rapport écrit et une réponse courte.
+
+## Qualification juridique et catalogue (retour d'expérience après construction)
+
+- **P43 — Répertoire de travail éphémère.** Le premier dossier de travail, dans le répertoire temporaire de
+  la session, a été effacé : générateurs, fiches de lecture, consolidation et 660 scénarios perdus (récupérés
+  en rejouant les transcriptions des agents). → `<work>` toujours dans un dossier permanent (hors dépôt git).
+- **P44 — Aucune qualification juridique dans le vocabulaire commun.** Le vocabulaire imposé aux lecteurs
+  contenait `operation_nature` (biens/services), `customer_type` (assujetti…), `consideration`… : l'appelant
+  devait qualifier juridiquement son opération alors que le texte définit ces notions (L. 211-33 livraison,
+  L. 211-47 prestation, L. 211-21 assujetti…). La revue a trouvé 25 qualifications de ce type. → Le
+  vocabulaire commun ne contient que des faits bruts ; chaque qualification définie par le texte est
+  **déduite par le graphe** à partir de faits bruts, et émise comme marqueur.
+- **P45 — Une définition n'est pas du décor.** Les articles classés `DEFINITION` n'alimentaient qu'un
+  `legalBasis` : 45 définitions ne servaient nulle part. → Chaque définition devient soit des questions de
+  fait (graphe de qualification), soit le texte complet de la description de la clé ou de l'option.
+- **P46 — Déduire sous la même clé.** Pour convertir une qualification sans casser l'existant : la déclarer
+  à la fois en INPUT et en OUTPUT ; le graphe de qualification l'émet comme marqueur ; un appelant qui
+  l'envoie reste prioritaire (court-circuit) et obtient les réponses d'avant. La déduction se place juste
+  avant le premier nœud qui teste la clé, et ne pose ses questions que si la clé compte pour le cas.
+- **P47 — Pas de notion inventée.** Chaque clé et chaque valeur doivent correspondre à une notion du texte
+  (on a failli créer `electronic_content_type`, qui n'existe pas dans le CIBS). Décrire l'**objet** avec
+  les notions du texte (le livre « sous toute autre forme », L. 213-219) et le **mode de fourniture**
+  séparément (service électronique pour le lieu).
+- **P48 — Le lieu d'abord, le taux ensuite.** L'étape taux part du lieu déterminé : en France, taux
+  français selon l'objet ; ailleurs, taux de l'État d'imposition (le moteur ne connaît que le taux normal
+  étranger : le dire en `info` si un taux réduit étranger peut s'appliquer).
+- **P49 — Descriptions de brouillon.** 74 descriptions d'inputs étaient des placeholders (« (seed) »,
+  « voir 4.x », renvoi à un graphe interne, paraphrase du libellé) et 324 options n'avaient aucune
+  description. → Chaque clé et chaque option : ce que l'appelant doit répondre, avec les critères de
+  l'article qui la définit.
+- **P50 — Import « réussi » mais non compilé.** Un import a répondu 200 alors que le moteur refusait le
+  graphe (cycle de nœuds) et continuait de servir l'ancienne version. Après un import, vérifier le chemin
+  réel (`/breadcrumb` ou un scénario) ; si le moteur signale l'erreur (version corrigée), la traiter.
+

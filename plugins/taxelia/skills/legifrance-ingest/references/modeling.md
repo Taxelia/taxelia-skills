@@ -41,8 +41,13 @@ Une valeur numérique à relire doit voyager en texte (ex. `rate_level` → `tau
 
 ## 4. Catalogue
 
-- Clés = **faits bruts** que l'appelant connaît (pays du client, transport, catégorie de bien…), pas des
-  conclusions juridiques. Fusionne les synonymes proposés par les lots (liste des renommages).
+- Clés = **faits bruts** que l'appelant connaît (pays du client, transport, forme juridique, ce qui est
+  fourni…), pas des conclusions juridiques. Toute qualification que le texte définit (livraison ou
+  prestation, assujetti, à titre onéreux, établissement stable, intermédiaire…) est **déduite par un graphe
+  de qualification** (P44–P46), en tête du primaire ou juste avant le premier nœud qui la teste, et émise
+  comme marqueur sous la même clé. Ne garder en input que les qualifications que le texte ne réduit pas à
+  des faits (nomenclatures de catégories, appréciations), avec leur définition complète en description.
+  Fusionne les synonymes proposés par les lots (liste des renommages).
 - Pour les `select` : toutes les valeurs, avec l'article de chacune dans la description d'option si utile.
 - Seuils : un `NUMBER` (`fieldType text`) quand la loi fixe le chiffre et que l'appelant détient la
   donnée (CA N-1 et N séparés) ; un booléen pré-calculé quand le seuil est fixé par arrêté ou dépend de

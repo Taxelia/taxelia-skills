@@ -74,6 +74,9 @@ noms de nœuds et textes de sortie en français correct (accents).
 3. Chaque article reçoit une catégorie : `REGLE`, `DEFINITION`, `HORS_MODELE` (calcul, procédure,
    délai… le moteur n'a ni variables ni arithmétique, P7) ou `RENVOI`.
 4. `python3 <skill>/scripts/coverage.py <work>` vérifie que chaque article du texte est classé une fois.
+5. Pour chaque article `DEFINITION` : décider s'il sera **déduit par un graphe de qualification** (faits
+   bruts → marqueur) ou **décrit** en entier dans le catalogue. Aucune qualification juridique définie par
+   le texte ne doit rester une question posée à l'appelant (P44–P46).
 
 ## Phase 3 — Consolidation (une passe, puis POINT D'ARRÊT 1)
 
@@ -83,6 +86,10 @@ par réutilisation**, chaîne d'étapes et fin de chaîne commune, **vocabulaire
 unifié (clés, types, valeurs, libellés, `legalBasis`, **décisif ou valeur par défaut**), conventions de
 sortie (`tax_rate` explicite à 0 pour les exonérations, P30), ordre de construction et scénarios, points
 à trancher (≤ 8, chacun avec une recommandation).
+
+Avant l'arrêt, fais une **revue des qualifications** : pour chaque input du catalogue proposé, fait brut,
+qualification définie (à déduire), qualification non déductible (à décrire) ou appréciation ; aucune
+description de brouillon (P49) ; aucune notion inventée (P47).
 
 **Arrêt 1** : présente à l'utilisateur la synthèse (nombre de graphes, blocs réutilisables, marqueurs,
 points à trancher avec recommandations) et envoie le fichier (`SendUserFile`). N'avance qu'après

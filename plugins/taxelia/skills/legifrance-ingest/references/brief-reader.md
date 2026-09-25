@@ -57,13 +57,16 @@ Articles hors du lot dont dépend une règle, ambiguïtés, incertitudes.
 
 ## Vocabulaire commun (à réutiliser)
 
-{liste des clés d'inputs et d'outputs de départ, avec type — ex. pour la TVA :
-`sale_date` DATE, `operation_nature` SELECT goods|services|import|intra_eu_acquisition, `consideration`
-BOOLEAN, `supplier_type` SELECT, `supplier_country` COUNTRY, `customer_type` SELECT, `customer_country`
-COUNTRY, `transport` BOOLEAN, `transport_by` SELECT, `departure_country` / `arrival_country` COUNTRY,
-`goods_category` / `service_category` SELECT ; sorties `taxable`, `taxable_country`, `exemption`,
-`liable_person`, `tax_rate`, `invoice_mention`, `legal_basis`, `info`… ; et, pour un workspace existant,
-les clés de son catalogue}
+{liste des clés d'inputs et d'outputs de départ, avec type — UNIQUEMENT des faits bruts (jamais une
+qualification juridique que le texte définit : pas de « nature de l'opération », « assujetti », « à titre
+onéreux »… — P44). Ex. pour la TVA : `sale_date` DATE, `supply_kind` SELECT (ce qui est fourni : vente d'un
+bien meuble, énergie, immeuble, location, travail sur le bien du client, service ou contenu numérique…),
+`supplier_legal_form` SELECT, `supplier_country` / `customer_country` COUNTRY, `transport` BOOLEAN,
+`departure_country` / `arrival_country` COUNTRY, `goods_category` / `service_category` SELECT ; sorties
+`taxable`, `taxable_country`, `tax_rate`, `invoice_mention`, `legal_basis`, `info`… ; et, pour un workspace
+existant, les clés de son catalogue}
+Pour chaque article `DEFINITION`, indiquer si la notion doit être **déduite par le graphe** à partir de
+faits bruts (et lesquels) ou seulement **décrite** dans le catalogue (P45).
 
 ## Blocs attendus (réutiliser les noms quand ils conviennent)
 
