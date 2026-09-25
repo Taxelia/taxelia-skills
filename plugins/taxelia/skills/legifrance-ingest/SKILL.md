@@ -31,17 +31,16 @@ noms de nœuds et textes de sortie en français correct (accents).
 1. **Première question, obligatoire** : utiliser un **workspace existant** ou en **créer un nouveau** ?
    Utilise `AskUserQuestion`. Si existant : lister les workspaces (`GET /workspaces`) et faire choisir.
    Si nouveau : proposer un id (slug `^[a-z0-9][a-z0-9-]{1,62}$`, ex. `cibs-2027`), un nom, une description.
-2. **Environnement** : local par défaut (`http://localhost:8088`, Mongo local `taxelia`). Le **dev** n'est
-   autorisé que si l'utilisateur le demande explicitement ; confirme alors avant CHAQUE écriture (P40).
-   Vérifie que l'API répond (`GET /health`). Si elle ne répond pas et qu'un `.claude/launch.json` du
-   projet définit une configuration `taxelia-api`, démarre-la avec l'outil de preview ; sinon demande à
-   l'utilisateur l'URL de l'API à utiliser (ou de la démarrer).
+2. **API** : l'API publique de Taxelia, `https://taxelia.bizyness.fr` (`/search` sans clé, routes
+   `/workspaces/**` avec une clé). Vérifie qu'elle répond (`GET /health`). Les écritures y modifient des
+   données partagées : annonce ce que tu vas créer ou modifier et obtiens l'accord de l'utilisateur avant
+   la première écriture, et avant toute modification d'un workspace existant (P40).
 3. **Clé API en écriture** : demande-la à l'utilisateur (ne va jamais la chercher en base : refusé, P39).
    Stocke-la dans `<work>/.apikey` (chmod 600) ; ne l'affiche jamais, ne la committe jamais.
 4. **Répertoire de travail** : `<work>` = `<racine du projet ouvert>/ingest-work/<workspace>/` par défaut
    (propose-le, l'utilisateur peut en choisir un autre ; ne le mets pas dans un dépôt git : il contient la clé).
    Écris `<work>/ingest.json` (lu par tous les scripts) :
-   `{"api": "http://localhost:8088", "workspace": "<id>", "primary_id": "<id>_principal", "primary_name": "<nom /search>"}`.
+   `{"api": "https://taxelia.bizyness.fr", "workspace": "<id>", "primary_id": "<id>_principal", "primary_name": "<nom /search>"}`.
 5. **Workspace existant** : exporte d'abord l'état (`<skill>/scripts/ws.py export`) et sauvegarde-le dans
    `<work>/backup-<date>.json`. Lis ses graphes et son catalogue : la conception devra s'y intégrer
    (réutiliser les clés, ne pas casser le graphe primaire, ne rien supprimer sans accord). Rappel P38 :
@@ -60,7 +59,7 @@ noms de nœuds et textes de sortie en français correct (accents).
    `window.__lf` = texte intégral où **chaque tableau est réinjecté en markdown à sa place** (Légifrance
    masque les tableaux derrière « Afficher le tableau », P2), et renvoie la taille et le nombre de tableaux.
 3. Récupère le texte par tranches (`window.__lf.slice(i, i+40000)` à chaque appel) et écris chaque
-   tranche dans `<work>/source.txt` (un `fetch` vers localhost est bloqué par la CSP de la page, P3).
+   tranche dans `<work>/source.txt` (un `fetch` depuis la page vers une autre adresse est bloqué par sa CSP, P3).
 4. Contrôle : `python3 <skill>/scripts/split_lots.py <work>/source.txt --stats` liste les articles, les en-têtes
    de chapitres et les numéros manquants (souvent des articles abrogés/inexistants, P4 — ne pas les
    signaler comme perdus sans vérifier).
@@ -132,4 +131,4 @@ Démontre une requête réelle (corps et réponse `/search`) sur un cas typique.
 - Ne compare pas avec un autre workspace sauf demande (le modèle est indépendant).
 - Toute modification de code d'un dépôt (moteur, éditeur…) sort du périmètre du skill : si un défaut du
   moteur bloque, décris-le à l'utilisateur et demande avant de coder (branche, TDD, pas de push).
-- Ne pousse rien, ne déploie rien. Le dev : seulement sur demande explicite et confirmation.
+- Ne pousse rien, ne déploie rien. Chaque écriture sur l'API se fait avec l'accord de l'utilisateur (P40).

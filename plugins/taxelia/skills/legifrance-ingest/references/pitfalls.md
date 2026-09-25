@@ -14,7 +14,7 @@ Chaque piège : ce qui s'est passé → quoi faire. Cite les numéros dans les c
   extraction texte perd les taux (L. 213-151 et suivants), les plafonds de franchise, etc. 28 tableaux
   manquaient au CIBS. → `scripts/extract_legifrance.js` réinjecte chaque `<table>` en markdown à sa place.
   Dans ces tableaux, une ligne sans colonne « conditions » **hérite** de celle du dessus (cellule fusionnée).
-- **P3 — CSP.** Un `fetch` depuis la page vers un serveur local est bloqué. → Sortir le texte par tranches
+- **P3 — CSP.** Un `fetch` depuis la page vers une autre adresse est bloqué. → Sortir le texte par tranches
   de 40 000 caractères via le retour de `javascript_tool`.
 - **P4 — Numéros absents.** Des numéros d'articles n'existent pas (abrogés, jamais créés : L. 213-30,
   L. 213-209…). Ne pas les déclarer « perdus » : compare avec les en-têtes « Articles X à Y ».
@@ -109,10 +109,12 @@ Chaque piège : ce qui s'est passé → quoi faire. Cite les numéros dans les c
 
 - **P39 — Clé API.** Ne pas la lire en base (refusé par la politique de permissions) : la demander.
   Ne jamais l'afficher ni l'écrire dans un dépôt ; `<work>/.apikey` en chmod 600.
-- **P40 — Dev.** Écrire sur le dev seulement sur demande explicite, confirmation avant chaque écriture.
-  Le workspace construit en local se transporte par export → import.
-- **P41 — Serveurs.** Démarrer l'API/éditeur via `.claude/launch.json` et les outils de preview. Après
-  un changement de moteur installé, redémarrer l'API avant de tester. Ne pas redémarrer pendant qu'un
-  sous-agent joue des scénarios.
+- **P40 — API partagée.** `https://taxelia.bizyness.fr` sert des données partagées : annoncer et faire
+  valider chaque écriture (création de workspace, import de catalogue, import de graphes, bascule du
+  mode strict) ; ne jamais toucher à un workspace autre que celui convenu ; exporter avant de modifier un
+  workspace existant.
+- **P41 — Comportement inattendu du moteur.** Si une règle ne peut pas s'exprimer, ou si le moteur se
+  comporte autrement que `engine-and-api.md`, ne contourne pas en silence : décris le cas à
+  l'utilisateur (une évolution du moteur est hors du périmètre du skill).
 - **P42 — Sous-agents.** Lecture : en parallèle. Construction : **séquentielle** (API partagée). Donner
   à chacun les chemins de fichiers, pas le contenu ; exiger un rapport écrit et une réponse courte.

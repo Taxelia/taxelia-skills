@@ -4,7 +4,11 @@ Source de vérité : `back/taxelia-api-core/docs/{domain,architecture}.md` et
 `back/taxelia-api-application/docs/api.md`. Relis-les si un comportement te surprend : le code a pu
 évoluer depuis l'écriture de ce skill.
 
-## API (auth : en-tête `X-Api-Key: <clé en écriture>` sur toutes les routes `/workspaces/**`)
+## API
+
+Base : **`https://taxelia.bizyness.fr`** (API publique de Taxelia). Auth : en-tête
+`X-Api-Key: <clé en écriture>` sur toutes les routes `/workspaces/**` ; `/search`, `/breadcrumb` et
+`/health` sont sans clé.
 
 | Appel | Usage |
 |---|---|
@@ -108,10 +112,3 @@ Réponse : `outputs[] {key, type, values | translations}`, `inputs {provided, re
     **Mode souple** (défaut, `tva-france`) : input absent = condition fausse, le repli est pris en silence.
 11. Compilation : nœuds partagés (un nœud atteint par plusieurs chemins, un graphe référencé partout =
     coût unique) ; recompilation d'un workspace ~2 s ; chaque import republie et recompile.
-
-## Démarrage local
-
-Si le projet ouvert a un `.claude/launch.json` : `taxelia-api` (port 8088, Mongo local `taxelia`, profil
-`local`) et `taxelia-graph-editor` (port 8089). Sinon, demander l'URL de l'API à l'utilisateur. Démarrer/arrêter avec les outils de preview
-(`preview_start`/`preview_stop`), pas avec Bash. L'éditeur s'ouvre sur un workspace par
-`http://localhost:8089/?ws=<id>`.

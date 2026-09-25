@@ -4,7 +4,7 @@ Tous les scripts Python lisent `ingest.json` du répertoire de travail (`--work 
 `INGEST_WORK`, ou répertoire courant / parents) et la clé dans `<work>/.apikey` (jamais affichée).
 
 ```json
-{"api": "http://localhost:8088", "workspace": "cibs-2027", "primary_id": "cibs_2027_principal", "primary_name": "cibs_2027"}
+{"api": "https://taxelia.bizyness.fr", "workspace": "cibs-2027", "primary_id": "cibs_2027_principal", "primary_name": "cibs_2027"}
 ```
 
 | Script | Rôle |

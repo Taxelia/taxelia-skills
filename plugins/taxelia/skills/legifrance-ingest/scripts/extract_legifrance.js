@@ -2,7 +2,7 @@
 // Builds window.__lf: the full text of the page where every <table> is replaced, IN PLACE, by a markdown table
 // (Légifrance hides tables behind "Afficher le tableau": a plain text extraction loses rates and thresholds).
 // Then read it in slices with further javascript_tool calls:  window.__lf.slice(0, 40000), (40000, 80000)…
-// (a fetch to a local server is blocked by the page's CSP).
+// (a fetch from the page to another address is blocked by the page's CSP).
 (() => {
   const root = document.querySelector('main') || document.body;
   const clone = root.cloneNode(true);
