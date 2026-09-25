@@ -1,5 +1,7 @@
 # Skills Taxelia
 
+Dépôt : https://github.com/Taxelia/taxelia-skills
+
 Marketplace Claude Code (`taxelia-skills`) contenant le plugin `taxelia`. Chaque skill est un
 sous-dossier de `plugins/taxelia/skills/<nom-du-skill>/` avec son `SKILL.md`.
 
@@ -9,12 +11,19 @@ sous-dossier de `plugins/taxelia/skills/<nom-du-skill>/` avec son `SKILL.md`.
 
 ## Installer
 
-Dans Claude Code (ou en ligne de commande avec `claude plugin …`) :
+Dans Claude Code :
 
 ```
-/plugin marketplace add <chemin local ou URL git de ce dépôt>
+/plugin marketplace add Taxelia/taxelia-skills
 /plugin install taxelia@taxelia-skills
 ```
+
+En ligne de commande : `claude plugin marketplace add Taxelia/taxelia-skills` puis
+`claude plugin install taxelia@taxelia-skills`. L'URL complète
+`https://github.com/Taxelia/taxelia-skills.git` fonctionne aussi ; pour tester des modifications non
+poussées, on peut ajouter le chemin local d'un clone à la place.
+
+Ouvrir ensuite une nouvelle session : le skill se lance avec `/taxelia:legifrance-ingest <url>`.
 
 Mettre à jour après un `git pull` (ou quand le dépôt distant a changé) :
 
@@ -28,5 +37,6 @@ Mettre à jour après un `git pull` (ou quand le dépôt distant a changé) :
    quand l'utiliser), avec ses `references/` et `scripts/` éventuels.
 2. Chemins : relatifs au répertoire du skill (Claude le connaît au lancement), jamais de chemin absolu
    propre à une machine.
-3. Incrémenter `version` dans `plugins/taxelia/.claude-plugin/plugin.json`, committer, puis
-   `/plugin marketplace update taxelia-skills` sur chaque machine.
+3. Incrémenter `version` dans `plugins/taxelia/.claude-plugin/plugin.json`, committer et pousser sur
+   https://github.com/Taxelia/taxelia-skills, puis `/plugin marketplace update taxelia-skills` sur chaque
+   machine.
