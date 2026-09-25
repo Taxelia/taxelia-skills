@@ -1,0 +1,14 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "taxelia-skills",
+  "description": "Skills Claude Code du projet Taxelia",
+  "owner": { "name": "Taxelia" },
+  "plugins": [
+    {
+      "name": "taxelia",
+      "description": "Skills Taxelia : ingestion de textes Légifrance en graphes de décision, et skills à venir.",
+      "source": "./plugins/taxelia",
+      "category": "development"
+    }
+  ]
+}

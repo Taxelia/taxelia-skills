@@ -1,0 +1,6 @@
+{
+  "name": "taxelia",
+  "description": "Skills Claude Code du projet Taxelia (moteur de graphes de décision fiscaux).",
+  "version": "0.1.0",
+  "author": { "name": "Taxelia" }
+}

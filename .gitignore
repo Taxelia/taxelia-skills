@@ -1,0 +1,6 @@
+.DS_Store
+__pycache__/
+*.pyc
+# Répertoires de travail des skills (textes, rapports, clé API) : jamais versionnés
+ingest-work/
+.apikey
