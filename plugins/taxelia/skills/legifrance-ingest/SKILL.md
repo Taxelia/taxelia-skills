@@ -29,7 +29,8 @@ noms de nœuds et textes de sortie en français correct (accents).
 ## Phase 0 — Cadrage (toujours, avant toute action)
 
 1. **Première question, obligatoire** : utiliser un **workspace existant** ou en **créer un nouveau** ?
-   Utilise `AskUserQuestion`. Si existant : lister les workspaces (`GET /workspaces`) et faire choisir.
+   Utilise `AskUserQuestion`. Si existant : lister les workspaces (`GET /workspaces`) et faire choisir ;
+   tu es alors en **mode mise à jour** (section dédiée ci-dessous, à appliquer en plus des phases).
    Si nouveau : proposer un id (slug `^[a-z0-9][a-z0-9-]{1,62}$`, ex. `cibs-2027`), un nom, une description.
 2. **API** : l'API publique de Taxelia, `https://taxelia.bizyness.fr` (`/search` sans clé, routes
    `/workspaces/**` avec une clé). Vérifie qu'elle répond (`GET /health`). Les écritures y modifient des
@@ -42,12 +43,47 @@ noms de nœuds et textes de sortie en français correct (accents).
    Écris `<work>/ingest.json` (lu par tous les scripts) :
    `{"api": "https://taxelia.bizyness.fr", "workspace": "<id>", "primary_id": "<id>_principal", "primary_name": "<nom /search>"}`.
 5. **Workspace existant** : exporte d'abord l'état (`<skill>/scripts/ws.py export`) et sauvegarde-le dans
-   `<work>/backup-<date>.json`. Lis ses graphes et son catalogue : la conception devra s'y intégrer
-   (réutiliser les clés, ne pas casser le graphe primaire, ne rien supprimer sans accord). Rappel P38 :
-   un workspace dupliqué ne peut pas être « promu » en retour ; si l'utilisateur veut un bac à sable,
-   le dire avant de dupliquer.
+   `<work>/backup-<date>.json`. `primary_id` / `primary_name` de `ingest.json` sont ceux de **son graphe
+   principal existant** (le seul graphe nommé) — jamais un nouveau. Rappel P38 : un workspace dupliqué ne
+   peut pas être « promu » en retour ; si l'utilisateur veut un bac à sable, le dire avant de dupliquer.
 6. Demande aussi, si ce n'est pas clair : le périmètre (tout le texte ou certains chapitres) et la
    date d'effet à utiliser dans les scénarios.
+
+## Deux règles absolues
+
+- **Un seul graphe principal par workspace** (P51). C'est le seul graphe nommé (clé `tree` de `/search`) ;
+  tous les autres sont des sous-graphes sans nom, atteints par des références. Un nouveau texte s'intègre
+  au graphe principal existant (nouvelle branche, nouveau sous-graphe référencé) ; ne crée jamais un
+  second graphe principal. `scripts/diff_export.py` échoue si l'état final a zéro ou plusieurs graphes nommés.
+- **Réutiliser le catalogue avant de créer** (P52). Avant de créer un input ou un output, cherche s'il en
+  existe déjà un qui couvre le besoin : `python3 <skill>/scripts/catalog_search.py "<notion>" "<fait brut>"
+  "<article>"`, en plusieurs formulations, et lis les descriptions et options des candidats. Une clé
+  couvre le besoin → la réutiliser. **En cas de doute** (notion voisine, option manquante dans un select
+  existant, plusieurs candidats) → **arrête-toi et demande confirmation** à l'utilisateur
+  (`AskUserQuestion` avec les candidats et ta proposition) avant toute création ou modification de clé.
+  Consigne chaque décision (réutilisée / créée / demandée) dans `<work>/catalog-decisions.md`.
+
+## Mode mise à jour (workspace existant)
+
+Tu modifies des graphes existants, pas seulement tu en ajoutes. En plus des phases :
+1. **État de référence** : export complet sauvegardé (phase 0), puis **suite de non-régression** :
+   reprends les scénarios existants s'il y en a (`<work>/tests/`), sinon construis-en une à partir de
+   l'export (au moins un scénario par feuille du graphe principal et par sous-graphe impacté) et joue-la
+   sur l'état actuel : elle doit passer avant ta première modification.
+2. **Analyse d'impact** (avant l'arrêt 1) : pour chaque règle du nouveau texte, trouve ce que le modèle
+   existant fait déjà (cherche les articles dans les `legal_basis` et les descriptions de l'export, et les
+   clés avec `catalog_search.py`) et classe-la : **déjà couverte** (rien à faire, ou mise à jour d'un
+   article cité), **à modifier** (graphe et nœuds concernés, ce qui change), **nouvelle** (où la brancher
+   dans le graphe principal existant). Les graphes existants gardent leur id ; tu ne supprimes ni graphe
+   ni clé sans accord explicite.
+3. **Modifications** : pars toujours de l'export le plus récent (jamais d'une copie ancienne : l'éditeur a
+   pu changer les graphes), modifie le JSON par script ou par générateur, réimporte **seulement** les
+   graphes modifiés (un import remplace le graphe entier par le fichier : ne rien perdre), puis
+   `diff_export.py <avant> <après>` pour vérifier que seul ce qui était prévu a changé.
+4. **Non-régression** : la suite de référence doit repasser, sauf les scénarios que la nouvelle loi change
+   volontairement (liste-les, avec l'article, dans le rapport).
+5. **Arrêts** : l'arrêt 1 présente l'analyse d'impact (couvert / à modifier / nouveau, clés réutilisées ou à
+   créer) ; l'arrêt 2 présente le `diff_export` et les scénarios changés.
 
 ## Phase 1 — Extraction du texte (Légifrance est derrière Cloudflare)
 
@@ -136,6 +172,8 @@ Démontre une requête réelle (corps et réponse `/search`) sur un cas typique.
 
 - Les valeurs attendues des scénarios viennent **de la loi**, jamais de la sortie du graphe (P36).
 - Ne compare pas avec un autre workspace sauf demande (le modèle est indépendant).
+- Un seul graphe principal par workspace ; aucune clé créée sans avoir vérifié le catalogue existant,
+  et arrêt pour confirmation en cas de doute (voir « Deux règles absolues »).
 - Toute modification de code d'un dépôt (moteur, éditeur…) sort du périmètre du skill : si un défaut du
   moteur bloque, décris-le à l'utilisateur et demande avant de coder (branche, TDD, pas de push).
 - Ne pousse rien, ne déploie rien. Chaque écriture sur l'API se fait avec l'accord de l'utilisateur (P40).

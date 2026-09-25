@@ -30,7 +30,13 @@ La clé API est dans `{work}/.apikey` : ne l'affiche jamais, ne la recopie nulle
   marqueur ou par fait connu) ; ne jamais donner de valeur par défaut à un fait décisif pour faire taire
   une question.
 - `tax_rate` explicite (0 pour exonération / hors champ) selon `modeling.md` §5.
-- Catalogue : déjà importé. Clé ou valeur manquante → ajouter l'entrée COMPLÈTE à
+- Un seul graphe principal : `{primary_id}` (nom `{primary_name}`). Tu ne crées pas d'autre graphe nommé.
+- Graphes existants (mode mise à jour) : pars de l'export le plus récent, garde les ids, ne supprime rien
+  sans accord ; réimporte seulement ce que tu modifies ; `diff_export.py` avant/après dans ton rapport.
+- **Avant de créer une clé** : `python3 {skill}/scripts/catalog_search.py "<notion>" "<fait>" "<article>"` ;
+  si une clé couvre le besoin, réutilise-la ; **en cas de doute, arrête-toi** et décris les candidats dans
+  ton rapport sans créer la clé (le contrôleur demandera confirmation à l'utilisateur).
+- Catalogue : déjà importé. Clé ou valeur manquante (après vérification) → ajouter l'entrée COMPLÈTE à
   `{work}/catalog-additions.json`, l'importer seule (`scripts/imp.py`), le signaler.
 - Défaut repéré dans un graphe déjà construit : ne le réécris pas ; décris la correction exacte dans ton rapport.
 

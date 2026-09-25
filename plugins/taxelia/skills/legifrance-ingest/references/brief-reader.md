@@ -65,6 +65,8 @@ bien meuble, énergie, immeuble, location, travail sur le bien du client, servic
 `departure_country` / `arrival_country` COUNTRY, `goods_category` / `service_category` SELECT ; sorties
 `taxable`, `taxable_country`, `tax_rate`, `invoice_mention`, `legal_basis`, `info`… ; et, pour un workspace
 existant, les clés de son catalogue}
+Pour une proposition de clé, vérifier d'abord qu'aucune clé du vocabulaire (ou du catalogue existant) ne
+couvre déjà la notion ; sinon la proposer en signalant la clé la plus proche (P52).
 Pour chaque article `DEFINITION`, indiquer si la notion doit être **déduite par le graphe** à partir de
 faits bruts (et lesquels) ou seulement **décrite** dans le catalogue (P45).
 

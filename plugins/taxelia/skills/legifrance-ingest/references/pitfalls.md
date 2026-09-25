@@ -152,3 +152,18 @@ Chaque piège : ce qui s'est passé → quoi faire. Cite les numéros dans les c
   graphe (cycle de nœuds) et continuait de servir l'ancienne version. Après un import, vérifier le chemin
   réel (`/breadcrumb` ou un scénario) ; si le moteur signale l'erreur (version corrigée), la traiter.
 
+## Mise à jour et catalogue existant
+
+- **P51 — Un seul graphe principal par workspace.** Le workspace a exactement un graphe nommé (le
+  principal) ; tout le reste est atteint par référence. En mise à jour, le nouveau texte se branche sur ce
+  principal existant (nouvelle branche ou sous-graphe) ; créer un second principal ferait deux points
+  d'entrée concurrents pour `/search`.
+- **P52 — Clés en double.** Des lecteurs parallèles ont proposé 364 clés pour 193 réelles, et une clé
+  inventée (`electronic_content_type`) a failli doubler une notion existante (`goods_category = livre`).
+  Avant toute création d'input ou d'output : `catalog_search.py` en plusieurs formulations ; réutiliser ce
+  qui couvre le besoin ; en cas de doute, s'arrêter et demander confirmation.
+- **P53 — Mise à jour = partir de l'état réel.** L'import remplace un graphe entier par le contenu du
+  fichier : réimporter depuis une copie ancienne efface les modifications faites entre-temps (éditeur,
+  autre session). Toujours exporter juste avant, modifier, comparer (`diff_export.py`), puis rejouer la
+  non-régression.
+

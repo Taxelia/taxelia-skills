@@ -19,6 +19,8 @@ Tous les scripts Python lisent `ingest.json` du répertoire de travail (`--work 
 | `check_couples.py` | 0 attendu : couples (source, cible) portant plusieurs arêtes |
 | `run_scenarios.py <tests>` | rejoue les scénarios (`expect`, `contains`, `absent`, `required`, `not_required`, `defaulted`, `outputs`, `result`) |
 | `ask.py '<json>'` | une requête `/search` lisible (démonstration, sonde des questions posées) |
+| `catalog_search.py "<termes>"…` | **obligatoire avant de créer une clé** : cherche les clés existantes qui couvrent déjà le besoin |
+| `diff_export.py <avant> <après>` | ce qui a changé entre deux exports (graphes, nœuds, arêtes, catalogue) ; échoue si ≠ 1 graphe nommé |
 
 Exemple de générateur (dans `<work>/gen/lot1.py`) :
 

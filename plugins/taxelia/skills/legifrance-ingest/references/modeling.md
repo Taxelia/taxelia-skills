@@ -10,7 +10,8 @@ règles. Sur le CIBS : 531 règles / 222 définitions / 219 hors modèle / 72 re
 
 ## 2. Architecture
 
-- **Un seul graphe primaire** (seul graphe nommé en production : c'est la clé `tree` de `/search`).
+- **Un seul graphe primaire par workspace** (seul graphe nommé : c'est la clé `tree` de `/search`) ; en
+  mise à jour, on branche le nouveau texte sur le primaire existant, on n'en crée jamais un second (P51).
   Il porte le champ d'application (hors champ, non assujetti…) et l'aiguillage ; il ne fait pas le travail.
 - **Sous-graphes découpés d'abord pour la réutilisation** : un bloc appelé depuis plusieurs branches
   (ex. franchise en base) est un graphe. Puis par sous-section du texte, ≤ ~40 nœuds par graphe.
@@ -48,6 +49,10 @@ Une valeur numérique à relire doit voyager en texte (ex. `rate_level` → `tau
   comme marqueur sous la même clé. Ne garder en input que les qualifications que le texte ne réduit pas à
   des faits (nomenclatures de catégories, appréciations), avec leur définition complète en description.
   Fusionne les synonymes proposés par les lots (liste des renommages).
+- **Avant toute création de clé** (et toujours pour un workspace existant) : chercher une clé existante
+  qui couvre le besoin (`scripts/catalog_search.py`), la réutiliser ; en cas de doute, s'arrêter et
+  demander confirmation à l'utilisateur (P52). Ajouter une option à un select existant est une
+  modification de cette clé : même règle.
 - Pour les `select` : toutes les valeurs, avec l'article de chacune dans la description d'option si utile.
 - Seuils : un `NUMBER` (`fieldType text`) quand la loi fixe le chiffre et que l'appelant détient la
   donnée (CA N-1 et N séparés) ; un booléen pré-calculé quand le seuil est fixé par arrêté ou dépend de
