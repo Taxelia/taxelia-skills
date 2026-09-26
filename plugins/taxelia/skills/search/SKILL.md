@@ -48,10 +48,16 @@ l'API.** `<skill>` = le répertoire de base de ce skill (indiqué au lancement) 
    - Si `inputs.required` n'est pas vide : `run` affiche après la réponse l'entrée catalogue de ces clés
      (section `CATALOG OF REQUIRED INPUTS`, lue elle aussi via l'API) ; pose les
      questions à l'utilisateur, **une clé à la fois**, avec le libellé, la description et les valeurs
-     possibles tels que l'API les donne (`AskUserQuestion` quand il y a 2 à 4 valeurs ; sinon liste les
-     valeurs dans ton message et demande). Si l'utilisateur ne sait pas, arrête et présente la réponse
-     partielle (`complete: false`).
-   - Ajoute la réponse aux inputs et relance. Continue jusqu'à `inputs.required` vide.
+     possibles tels que l'API les donne.
+   - **Toujours avec `AskUserQuestion`, jamais par un message** : un message termine ton tour et casse la
+     boucle. Au plus 4 options par question : au-delà, pagine (3 valeurs + « Autres valeurs… » qui ouvre
+     la page suivante, dernière page jusqu'à 4 valeurs). Champ `location` : 3 codes plausibles d'après la
+     description + « Other » pour saisir un code ; `boolean` : `true` / `false` ; texte, nombre, date :
+     une option d'exemple, la saisie se fait via « Other ». Chaque option : la valeur technique en label,
+     le libellé et la description du catalogue en description.
+   - Ajoute la réponse aux inputs et relance **dans le même tour**, sans t'arrêter pour commenter ;
+     continue jusqu'à `inputs.required` vide. Ne rends la main qu'à la réponse finale, ou si l'utilisateur
+     répond qu'il ne sait pas (présente alors la réponse partielle, `complete: false`).
 5. **Réponse finale**
    - La réponse à la question, reprise **telle que l'API la donne** (ex. `tax_rate`, `invoice_mention`), puis
      les autres sorties utiles, `legal_basis` et `info` cités tels quels.
